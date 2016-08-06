@@ -76,16 +76,21 @@ public abstract class SearchActivityView extends RelativeLayout {
     private SearchClickListener mSearchClickListener;
     protected View.OnClickListener mExitClickListener;
 
+    private boolean mShowVoiceSearchButton = true;
+
     public SearchActivityView(Context context) {
         super(context);
+        mShowVoiceSearchButton = context.getResources().getBoolean(R.bool.show_voice_search_button);
     }
 
     public SearchActivityView(Context context, AttributeSet attrs) {
         super(context, attrs);
+         mShowVoiceSearchButton = context.getResources().getBoolean(R.bool.show_voice_search_button);
     }
 
     public SearchActivityView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+         mShowVoiceSearchButton = context.getResources().getBoolean(R.bool.show_voice_search_button);
     }
 
     @Override
@@ -116,6 +121,10 @@ public abstract class SearchActivityView extends RelativeLayout {
         mButtonsKeyListener = new ButtonsKeyListener();
         mSearchGoButton.setOnKeyListener(mButtonsKeyListener);
         mVoiceSearchButton.setOnKeyListener(mButtonsKeyListener);
+
+        if (!mShowVoiceSearchButton) {
+            mVoiceSearchButton.setVisibility(View.GONE);
+        }
 
         mUpdateSuggestions = true;
     }
@@ -286,7 +295,11 @@ public abstract class SearchActivityView extends RelativeLayout {
     }
 
     protected boolean shouldShowVoiceSearch(boolean queryEmpty) {
-        return queryEmpty;
+        if (mShowVoiceSearchButton) {
+            return queryEmpty;
+        } else {
+            return false;
+        }
     }
 
     /**
